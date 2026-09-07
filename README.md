@@ -1,86 +1,29 @@
-> ⚠️ This repository is now deprecated. Use the [dtc-starter](https://github.com/medusajs/dtc-starter) instead.
-
-<p align="center">
-  <a href="https://www.medusajs.com">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/59018053/229103275-b5e482bb-4601-46e6-8142-244f531cebdb.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/59018053/229103726-e5b529a3-9b3f-4970-8a1f-c6af37f087bf.svg">
-    <img alt="Medusa logo" src="https://user-images.githubusercontent.com/59018053/229103726-e5b529a3-9b3f-4970-8a1f-c6af37f087bf.svg">
-    </picture>
-  </a>
-</p>
-
 <h1 align="center">
-  Medusa Next.js Starter Template
+  RetailDesk Storefront Starter
 </h1>
 
 <p align="center">
-Combine Medusa's modules for your commerce backend with the newest Next.js 15 features for a performant storefront.</p>
+A Next.js 15 storefront starter for RetailDesk's Storefront API - a Medusa.js v2 Store API-compatible backend for RetailDesk webshops. Fork this to build a fully custom, headless storefront instead of RetailDesk's own drag-and-drop builder.</p>
 
-<p align="center">
-  <a href="https://github.com/medusajs/medusa/blob/master/CONTRIBUTING.md">
-    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs welcome!" />
-  </a>
-  <a href="https://discord.gg/xpCwq3Kfn8">
-    <img src="https://img.shields.io/badge/chat-on%20discord-7289DA.svg" alt="Discord Chat" />
-  </a>
-  <a href="https://twitter.com/intent/follow?screen_name=medusajs">
-    <img src="https://img.shields.io/twitter/follow/medusajs.svg?label=Follow%20@medusajs" alt="Follow @medusajs" />
-  </a>
-</p>
+Based on [medusajs/nextjs-starter-medusa](https://github.com/medusajs/nextjs-starter-medusa), adapted for RetailDesk's Storefront API. See what's different below.
 
-### Prerequisites
+# Prerequisites
 
-To use the [Next.js Starter Template](https://medusajs.com/nextjs-commerce/), you should have a Medusa server running locally on port 9000.
-For a quick setup, run:
-
-```shell
-npx create-medusa-app@latest
-```
-
-Check out [create-medusa-app docs](https://docs.medusajs.com/learn/installation) for more details and troubleshooting.
-
-# Overview
-
-The Medusa Next.js Starter is built with:
-
-- [Next.js](https://nextjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Typescript](https://www.typescriptlang.org/)
-- [Medusa](https://medusajs.com/)
-
-Features include:
-
-- Full ecommerce support:
-  - Product Detail Page
-  - Product Overview Page
-  - Product Collections
-  - Cart
-  - Checkout with Stripe
-  - User Accounts
-  - Order Details
-- Full Next.js 15 support:
-  - App Router
-  - Next fetching/caching
-  - Server Components
-  - Server Actions
-  - Streaming
-  - Static Pre-Rendering
+1. Create a webshop in your [RetailDesk backoffice](https://backoffice.retaildesk.com) with the **"Developer API"** option (instead of "Eenvoudige bouwer"). This gives you a publishable API key and the exact `.env.local` values for this starter.
+2. Full endpoint reference and Postman/OpenAPI export: see the Storefront API docs, linked from your webshop's settings page.
 
 # Quickstart
 
 ### Setting up the environment variables
 
-Navigate into your projects directory and get your environment variables ready:
-
 ```shell
-cd nextjs-starter-medusa/
-mv .env.template .env.local
+cd retaildesk-storefront-starter/
+cp .env.template .env.local
 ```
 
-### Install dependencies
+Fill in `.env.local` with the values shown after creating your webshop (publishable key, backend URL, region).
 
-Use Yarn to install all dependencies.
+### Install dependencies
 
 ```shell
 yarn
@@ -88,40 +31,37 @@ yarn
 
 ### Start developing
 
-You are now ready to start up your project.
-
 ```shell
 yarn dev
 ```
 
-### Open the code and start customizing
-
 Your site is now running at http://localhost:8000!
 
-# Payment integrations
+# What's different from a standard Medusa storefront
 
-By default this starter supports the following payment integrations
+- **Payment**: checkout redirects to a hosted payment page (iDEAL, Bancontact, credit card) instead of an embedded payment form. See `src/modules/checkout/components/payment-button` for the redirect-based flow.
+- **Wallet & coupons**: customers can pay (part of) an order from their RetailDesk wallet balance and/or a coupon/gift-voucher code, combined with a normal payment method for whatever remains. See `src/modules/account/components/wallet` and `src/modules/checkout/components/discount-code`.
+- **Returns**: guest and account-based order returns are supported out of the box (`src/app/[countryCode]/(main)/returns`, `src/app/[countryCode]/(main)/account/@dashboard/returns`).
+- **Single region**: no `/nl/`-style locale prefix in URLs - clean paths for a single-region storefront. Product names/descriptions come back in the webshop's default language; add your own translations via the `x-medusa-locale` header if you need multilingual content (see the Storefront API docs).
 
-- [Stripe](https://stripe.com/)
+# Overview
 
-To enable the integrations you need to add the following to your `.env.local` file:
+Built with:
 
-```shell
-NEXT_PUBLIC_STRIPE_KEY=<your-stripe-public-key>
-```
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [TypeScript](https://www.typescriptlang.org/)
 
-You'll also need to setup the integrations in your Medusa server. See the [Medusa documentation](https://docs.medusajs.com) for more information on how to configure [Stripe](https://docs.medusajs.com/resources/commerce-modules/payment/payment-provider/stripe#main).
+Features:
+
+- Product detail & overview pages, collections, cart, checkout
+- Redirect-based payment (iDEAL, Bancontact, credit card)
+- Wallet balance + coupon codes at checkout
+- Customer accounts, order details, order returns
+- App Router, Server Components, Server Actions, streaming, static pre-rendering
 
 # Resources
 
-## Learn more about Medusa
-
-- [Website](https://www.medusajs.com/)
-- [GitHub](https://github.com/medusajs)
-- [Documentation](https://docs.medusajs.com/)
-
-## Learn more about Next.js
-
-- [Website](https://nextjs.org/)
-- [GitHub](https://github.com/vercel/next.js)
-- [Documentation](https://nextjs.org/docs)
+- [RetailDesk backoffice](https://backoffice.retaildesk.com)
+- [Next.js docs](https://nextjs.org/docs)
+- Based on [medusajs/nextjs-starter-medusa](https://github.com/medusajs/nextjs-starter-medusa) - see [Medusa's docs](https://docs.medusajs.com/) for anything not specific to RetailDesk's API.
