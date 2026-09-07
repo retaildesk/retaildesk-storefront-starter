@@ -4,6 +4,7 @@ import { transferCart } from "@lib/data/customer"
 import { ExclamationCircleSolid } from "@medusajs/icons"
 import { StoreCart, StoreCustomer } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 function CartMismatchBanner(props: {
@@ -13,6 +14,7 @@ function CartMismatchBanner(props: {
   const { customer, cart } = props
   const [isPending, setIsPending] = useState(false)
   const [actionText, setActionText] = useState("Run transfer again")
+  const router = useRouter()
 
   if (!customer || !!cart.customer_id) {
     return
@@ -24,6 +26,11 @@ function CartMismatchBanner(props: {
       setActionText("Transferring..")
 
       await transferCart()
+      // transferCart() only revalidates the fetch cache - it doesn't re-render this
+      // component's cart/customer props (set once at the parent Server Component's initial
+      // fetch), so without this the banner and button state never reflect a successful
+      // transfer no matter what happened server-side.
+      router.refresh()
     } catch {
       setActionText("Run transfer again")
       setIsPending(false)

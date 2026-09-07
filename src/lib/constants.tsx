@@ -5,7 +5,11 @@ import Ideal from "@modules/common/icons/ideal"
 import Bancontact from "@modules/common/icons/bancontact"
 import PayPal from "@modules/common/icons/paypal"
 
-/* Map of payment provider_id to their title and icon. Add in any payment providers you want to use. */
+// Map of payment provider_id to its title and icon. A provider still works without an
+// entry here (PaymentContainer falls back to the raw id, no icon) - this is only for
+// display. The set of pp_opp_redirect_* ids actually offered per webshop is controlled
+// server-side in StorefrontPaymentController::STOREFRONT_METHODS - add a new method there
+// first, then add its label/icon here to match.
 export const paymentInfoMap: Record<
   string,
   { title: string; icon: React.JSX.Element }
